@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { getProduct, products, formatPrice } from '@/lib/products'
 import { Eyebrow } from '@/components/site/primitives'
+import { AddToCartButton } from '@/components/site/add-to-cart-button'
 
 export function generateStaticParams() {
   return products.map((product) => ({ slug: product.slug }))
@@ -27,7 +28,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <Link href="/shop" className="link-underline mb-12 inline-flex items-center gap-2 self-start text-sm"><ArrowLeft className="size-4" aria-hidden="true" /> Back to shop</Link>
           <p className="text-lg leading-relaxed text-muted-foreground">{product.short}</p>
           <p className="mt-8 text-2xl">{formatPrice(product.price)}</p>
-          <button type="button" className="mt-8 w-full bg-primary px-6 py-4 text-sm uppercase tracking-[0.16em] text-primary-foreground transition-opacity hover:opacity-85 md:w-auto">Add to basket</button>
+          <AddToCartButton slug={product.slug} label="Add to basket" size="lg" className="mt-8 w-full md:w-auto" />
           <div className="mt-12 border-t border-border pt-8"><h2 className="font-serif text-2xl">What&apos;s inside</h2><ul className="mt-5 space-y-3 text-muted-foreground">{product.includes.map((item) => <li key={item}>— {item}</li>)}</ul></div>
         </div>
       </section>
