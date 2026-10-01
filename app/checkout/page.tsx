@@ -1,0 +1,14 @@
+'use client'
+
+import { useState } from 'react'
+import { PageHero } from '@/components/site/sections'
+import { Button } from '@/components/site/button'
+import { formatPrice } from '@/lib/products'
+import { useCart } from '@/components/site/cart-provider'
+
+export default function CheckoutPage() {
+  const { items, subtotal, clear } = useCart()
+  const [complete, setComplete] = useState(false)
+  if (complete) return <main><section className="container-site py-24 text-center md:py-36"><p className="eyebrow justify-center text-primary">Order confirmed</p><h1 className="display mx-auto mt-5 max-w-2xl text-5xl md:text-7xl">Thank you for your <em className="text-primary">order.</em></h1><p className="mx-auto mt-6 max-w-lg leading-relaxed text-muted-foreground">Your resources will be sent to your email shortly. Keep an eye on your inbox for the download details.</p></section></main>
+  return <main><PageHero eyebrow="Checkout" title={<>A simple final <em className="text-primary">step.</em></>} intro="Enter your details below. This prototype confirms the order flow without collecting payment details." breadcrumbs={[{ href: '/', label: 'Home' }, { href: '/cart', label: 'Cart' }, { label: 'Checkout' }]} /><section className="container-site pb-24 md:pb-36">{items.length === 0 ? <div className="border border-border bg-secondary p-10 text-center"><h2 className="display text-4xl">Nothing to check out yet.</h2><p className="mt-4 text-muted-foreground">Add a resource to your basket first.</p></div> : <div className="grid gap-12 md:grid-cols-12"><form className="space-y-8 md:col-span-7" onSubmit={(event) => { event.preventDefault(); clear(); setComplete(true) }}><div className="grid gap-8 sm:grid-cols-2"><label className="space-y-2 text-sm"><span>First name</span><input required className="field" /></label><label className="space-y-2 text-sm"><span>Last name</span><input required className="field" /></label></div><label className="block space-y-2 text-sm"><span>Email address</span><input required type="email" className="field" /></label><label className="block space-y-2 text-sm"><span>Billing address</span><textarea required rows={3} className="field resize-y" /></label><Button type="submit" size="lg" arrow="right">Place order</Button></form><aside className="h-fit border border-border bg-secondary p-6 md:col-span-4 md:col-start-9 md:p-8"><p className="eyebrow text-muted-foreground">Your order</p><div className="mt-6 space-y-4 border-t border-border pt-5">{items.map(({ product, qty, lineTotal }) => <div key={product.slug} className="flex justify-between gap-4 text-sm"><span>{product.name} <span className="text-muted-foreground">× {qty}</span></span><span>{formatPrice(lineTotal)}</span></div>)}</div><div className="mt-6 flex justify-between border-t border-border pt-5 font-medium"><span>Total</span><span>{formatPrice(subtotal)}</span></div></aside></div>}</section></main>
+}
